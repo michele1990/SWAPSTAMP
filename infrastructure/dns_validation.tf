@@ -1,9 +1,9 @@
-# Create a Route53 hosted zone for your domain.
+### dns_validation.tf
+
 resource "aws_route53_zone" "zone" {
   name = var.root_domain
 }
 
-# Create DNS records for ACM certificate validation.
 resource "aws_route53_record" "cert_validation" {
   for_each = {
     for dvo in aws_acm_certificate.prod_app_cert.domain_validation_options : dvo.domain_name => {

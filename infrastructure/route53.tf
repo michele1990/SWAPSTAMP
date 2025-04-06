@@ -1,4 +1,5 @@
-# Create an alias record for the apex domain.
+### route53.tf
+
 resource "aws_route53_record" "app_alias_apex" {
   zone_id = aws_route53_zone.zone.zone_id
   name    = var.root_domain
@@ -11,7 +12,6 @@ resource "aws_route53_record" "app_alias_apex" {
   }
 }
 
-# Create a wildcard alias record for all subdomains.
 resource "aws_route53_record" "app_alias_wildcard" {
   zone_id = aws_route53_zone.zone.zone_id
   name    = "*.${var.root_domain}"

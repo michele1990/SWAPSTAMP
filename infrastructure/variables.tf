@@ -1,3 +1,5 @@
+### variables.tf
+
 variable "aws_region" {
   description = "AWS region for S3 bucket and most resources"
   type        = string
@@ -13,7 +15,7 @@ variable "aws_region_cert" {
 variable "s3_bucket_name" {
   description = "Unique name for the S3 bucket hosting the production app"
   type        = string
-  default     = "prod-app-static-hosting-unique"  # Change this to ensure global uniqueness
+  default     = "prod-app-static-hosting-unique"
 }
 
 variable "s3_bucket_acl" {
@@ -59,13 +61,13 @@ variable "app_domain" {
 }
 
 variable "app_additional_domains" {
-  description = "Additional domains (e.g. www.swapstamp.com, api.swapstamp.com, etc.) to secure with the certificate"
+  description = "Additional domains (e.g. www.swapstamp.com, api.swapstamp.com, etc.)"
   type        = list(string)
   default     = ["*.swapstamp.com"]
 }
 
 variable "root_domain" {
-  description = "The root domain for Route53 (e.g. swapstamp.com)"
+  description = "The root domain for Route53"
   type        = string
   default     = "swapstamp.com"
 }

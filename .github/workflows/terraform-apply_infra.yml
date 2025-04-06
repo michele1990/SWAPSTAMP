@@ -10,7 +10,7 @@ on:
 env:
   TF_CLOUD_ORGANIZATION: "northwestwind"
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
-  TF_WORKSPACE: "learning-terraform"
+  TF_WORKSPACE: "SWAPSTAMP"
   CONFIG_DIRECTORY: "./infrastructure/"
 
 jobs:

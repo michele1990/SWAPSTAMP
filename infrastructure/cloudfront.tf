@@ -1,9 +1,10 @@
+### cloudfront.tf
+
 resource "aws_cloudfront_distribution" "prod_app_distribution" {
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = var.index_document
 
-  # Accept both the primary and additional domains.
   aliases = concat([var.app_domain], var.app_additional_domains)
 
   origin {

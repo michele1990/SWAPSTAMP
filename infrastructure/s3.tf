@@ -1,3 +1,5 @@
+### s3.tf
+
 resource "aws_s3_bucket" "prod_app_bucket" {
   bucket = var.s3_bucket_name
   acl    = var.s3_bucket_acl
@@ -33,4 +35,14 @@ resource "aws_s3_object" "index_html" {
   source       = var.index_html_source
   content_type = "text/html"
   etag         = filemd5(var.index_html_source)
+}
+
+
+### acm.tf
+
+resource "aws_acm_certificate" "prod_app_cert" {
+  provider                  = aws.us_east_1
+  domain_name               = var.app_domain
+  subject_alternative_names = var.app_additional_domains
+  validation_method         = "DNS"
 }

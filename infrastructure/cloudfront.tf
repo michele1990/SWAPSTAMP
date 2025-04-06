@@ -1,5 +1,3 @@
-### cloudfront.tf
-
 resource "aws_cloudfront_distribution" "prod_app_distribution" {
   enabled             = true
   is_ipv6_enabled     = true
@@ -8,13 +6,14 @@ resource "aws_cloudfront_distribution" "prod_app_distribution" {
   aliases = concat([var.app_domain], var.app_additional_domains)
 
   origin {
-    domain_name = aws_s3_bucket.prod_app_bucket.website_endpoint
+    domain_name = aws_s3_bucket.prod_app_bucket.bucket_regional_domain_name
     origin_id   = "S3ProdAppOrigin"
 
     custom_origin_config {
       http_port              = 80
       https_port             = 443
       origin_protocol_policy = "http-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
     }
   }
 
@@ -22,6 +21,7 @@ resource "aws_cloudfront_distribution" "prod_app_distribution" {
     target_origin_id       = "S3ProdAppOrigin"
     viewer_protocol_policy = "redirect-to-https"
     allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
 
     forwarded_values {
       query_string = false

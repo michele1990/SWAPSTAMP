@@ -3,6 +3,7 @@ resource "aws_cloudfront_distribution" "prod_app_distribution" {
   is_ipv6_enabled     = true
   default_root_object = var.index_document
 
+  # Aliases now consist of the primary domain plus the additional explicit domain(s)
   aliases = concat([var.app_domain], var.app_additional_domains)
 
   origin {

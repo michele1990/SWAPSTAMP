@@ -1,5 +1,5 @@
 resource "aws_route53_record" "app_alias_apex" {
-  zone_id = aws_route53_zone.zone.zone_id
+  zone_id = local.zone_id
   name    = var.root_domain
   type    = "A"
 
@@ -11,7 +11,7 @@ resource "aws_route53_record" "app_alias_apex" {
 }
 
 resource "aws_route53_record" "app_alias_wildcard" {
-  zone_id = aws_route53_zone.zone.zone_id
+  zone_id = local.zone_id
   name    = "*.${var.root_domain}"
   type    = "A"
 

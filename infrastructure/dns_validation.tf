@@ -1,5 +1,4 @@
 ############## Hosted Zone ##############
-
 # If an existing zone ID is provided, use it via a data block.
 data "aws_route53_zone" "existing_zone" {
   count   = var.existing_zone_id != "" ? 1 : 0
@@ -13,14 +12,13 @@ resource "aws_route53_zone" "zone" {
   comment = "Managed by Terraform"
 }
 
-# Define a local variable to reference the zone ID regardless of which source is used.
+# Define a local variable to reference the zone ID regardless of the source.
 locals {
   zone_id = var.existing_zone_id != "" ? var.existing_zone_id : aws_route53_zone.zone[0].zone_id
 }
 
 ############## Certificate Validation Records ##############
-
-# Deduplicate certificate DNS validation records if there are duplicates.
+# Deduplicate certificate DNS validation records if duplicates exist.
 locals {
   unique_validation_options = {
     for key, group in {

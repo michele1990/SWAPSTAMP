@@ -1,5 +1,3 @@
-### route53.tf
-
 resource "aws_route53_record" "app_alias_apex" {
   zone_id = aws_route53_zone.zone.zone_id
   name    = var.root_domain

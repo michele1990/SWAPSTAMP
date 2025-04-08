@@ -1,5 +1,3 @@
-### s3.tf
-
 resource "aws_s3_bucket" "prod_app_bucket" {
   bucket = var.s3_bucket_name
 
@@ -30,4 +28,3 @@ resource "aws_s3_bucket_public_access_block" "block" {
   ignore_public_acls      = false
   restrict_public_buckets = false
 }
-

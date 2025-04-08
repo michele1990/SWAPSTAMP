@@ -1,5 +1,3 @@
-### variables.tf
-
 variable "aws_region" {
   description = "AWS region for S3 bucket and most resources"
   type        = string

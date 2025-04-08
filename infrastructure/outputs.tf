@@ -10,5 +10,5 @@ output "cloudfront_domain_name" {
 
 output "route53_nameservers" {
   description = "Nameservers for Route53 zone"
-  value       = var.existing_zone_id != "" ? data.aws_route53_zone.existing_zone[0].name_servers : aws_route53_zone.zone[0].name_servers
+  value       = aws_route53_zone.zone.name_servers
 }

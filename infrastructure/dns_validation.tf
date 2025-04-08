@@ -12,14 +12,12 @@ locals {
 # Deduplicate certificate DNS validation records if duplicates exist.
 locals {
   unique_validation_options = {
-    for key, group in {
-      for dvo in aws_acm_certificate.prod_app_cert.domain_validation_options :
-      dvo.resource_record_name => {
-        name  = dvo.resource_record_name
-        type  = dvo.resource_record_type
-        value = dvo.resource_record_value
-      }...
-    } : key => group[0]
+    for dvo in aws_acm_certificate.prod_app_cert.domain_validation_options : 
+    dvo.domain_name => {
+      name  = dvo.resource_record_name
+      type  = dvo.resource_record_type
+      value = dvo.resource_record_value
+    }
   }
 }
 

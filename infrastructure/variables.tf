@@ -61,7 +61,7 @@ variable "app_domain" {
 variable "app_additional_domains" {
   description = "Additional domains (e.g. www.swapstamp.com, api.swapstamp.com, etc.)"
   type        = list(string)
-  default     = ["*.swapstamp.com"]
+  default     = ["www.swapstamp.com"]
 }
 
 variable "root_domain" {
@@ -80,10 +80,4 @@ variable "cloudfront_tag_name" {
   description = "Tag for the CloudFront distribution"
   type        = string
   default     = "ProdAppCloudFront"
-}
-
-variable "existing_zone_id" {
-  description = "Optional existing hosted zone ID. If provided, Terraform will use this existing zone rather than creating a new one."
-  type        = string
-  default     = "Z01348621ZQ7DM4XBS1QS"  # Set to "" if you want Terraform to create a new zone.
 }

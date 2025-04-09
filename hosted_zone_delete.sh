@@ -1,6 +1,6 @@
 #!/bin/bash
 
-HOSTED_ZONE_ID="Z01348621ZQ7DM4XBS1QS"
+HOSTED_ZONE_ID="Z0032297EA4MG7TE714I"
 
 # List all record sets (if you have more than the default records, pagination might be necessary)
 aws route53 list-resource-record-sets --hosted-zone-id "$HOSTED_ZONE_ID" --max-items 100 > records.json

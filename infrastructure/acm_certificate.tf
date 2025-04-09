@@ -1,4 +1,3 @@
-# Request a certificate covering the apex domain, the www subdomain, and any subdomain via wildcard.
 resource "aws_acm_certificate" "certificate" {
   provider                  = aws.us_east_1
   domain_name               = var.domain_name
@@ -7,4 +6,8 @@ resource "aws_acm_certificate" "certificate" {
     "*.${var.domain_name}"
   ]
   validation_method         = "DNS"
+
+  lifecycle {
+    ignore_changes = [domain_validation_options]
+  }
 }

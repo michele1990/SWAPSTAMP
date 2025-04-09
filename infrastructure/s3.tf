@@ -1,30 +1,56 @@
-resource "aws_s3_bucket" "prod_app_bucket" {
-  bucket = var.s3_bucket_name
+# Create a private S3 bucket to host the “under construction” page.
+resource "aws_s3_bucket" "website_bucket" {
+  bucket = "${var.domain_name}-website"
+  acl    = "private"
 
   tags = {
-    Name       = var.s3_bucket_tag_name
-    Created_By = var.created_by
+    Name = "Website Bucket for ${var.domain_name}"
   }
 }
 
-# Set static website configuration separately
-resource "aws_s3_bucket_website_configuration" "prod_app_website" {
-  bucket = aws_s3_bucket.prod_app_bucket.id
+# Set up a website configuration – note that CloudFront will be used to serve content
+resource "aws_s3_bucket_website_configuration" "website_config" {
+  bucket = aws_s3_bucket.website_bucket.id
 
   index_document {
-    suffix = var.index_document
+    suffix = "index.html"
   }
 
   error_document {
-    key = var.error_document
+    key = "index.html"
   }
 }
 
-# Optional (but required for legacy-style public read — NOT recommended in new AWS standards)
-resource "aws_s3_bucket_public_access_block" "block" {
-  bucket                  = aws_s3_bucket.prod_app_bucket.id
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
+# Upload the index.html (ensure you have an 'index.html' file available locally)
+resource "aws_s3_bucket_object" "index" {
+  bucket      = aws_s3_bucket.website_bucket.bucket
+  key         = "index.html"
+  source      = "index.html"
+  content_type = "text/html"
+  acl         = "private"
+}
+
+# Create an Origin Access Identity so CloudFront can access the S3 bucket securely.
+resource "aws_cloudfront_origin_access_identity" "oai" {
+  comment = "OAI for ${var.domain_name} website"
+}
+
+# S3 Bucket Policy to allow CloudFront (via the OAI) to read content.
+resource "aws_s3_bucket_policy" "bucket_policy" {
+  bucket = aws_s3_bucket.website_bucket.id
+
+  policy = jsonencode({
+    Version   = "2012-10-17",
+    Statement = [
+      {
+        Sid       = "AllowCloudFrontRead",
+        Effect    = "Allow",
+        Principal = {
+          AWS = aws_cloudfront_origin_access_identity.oai.iam_arn
+        },
+        Action    = "s3:GetObject",
+        Resource  = "${aws_s3_bucket.website_bucket.arn}/*"
+      }
+    ]
+  })
 }

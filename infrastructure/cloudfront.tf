@@ -1,28 +1,30 @@
-resource "aws_cloudfront_distribution" "prod_app_distribution" {
-  enabled             = true
-  is_ipv6_enabled     = true
-  default_root_object = var.index_document
+resource "aws_cloudfront_distribution" "website_distribution" {
+  depends_on = [aws_acm_certificate_validation.certificate_validation]
+  enabled    = true
+  is_ipv6_enabled = true
+  comment    = "CloudFront distribution for ${var.domain_name}"
+  default_root_object = "index.html"
 
-  # Aliases now consist of the primary domain plus the additional explicit domain(s)
-  aliases = concat([var.app_domain], var.app_additional_domains)
+  # List all aliases. A wildcard record is not supported as an alias in CloudFront,
+  # so we list the apex and www. Additional domain records can be added via Route53.
+  aliases = [
+    var.domain_name,
+    "www.${var.domain_name}"
+  ]
 
   origin {
-    domain_name = aws_s3_bucket.prod_app_bucket.bucket_regional_domain_name
-    origin_id   = "S3ProdAppOrigin"
-
-    custom_origin_config {
-      http_port              = 80
-      https_port             = 443
-      origin_protocol_policy = "http-only"
-      origin_ssl_protocols   = ["TLSv1.2"]
+    domain_name = aws_s3_bucket.website_bucket.bucket_regional_domain_name
+    origin_id   = "S3Origin"
+    s3_origin_config {
+      origin_access_identity = aws_cloudfront_origin_access_identity.oai.cloudfront_access_identity_path
     }
   }
 
   default_cache_behavior {
-    target_origin_id       = "S3ProdAppOrigin"
+    target_origin_id = "S3Origin"
+    allowed_methods  = ["GET", "HEAD"]
+    cached_methods   = ["GET", "HEAD"]
     viewer_protocol_policy = "redirect-to-https"
-    allowed_methods        = ["GET", "HEAD"]
-    cached_methods         = ["GET", "HEAD"]
 
     forwarded_values {
       query_string = false
@@ -33,18 +35,13 @@ resource "aws_cloudfront_distribution" "prod_app_distribution" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = aws_acm_certificate_validation.prod_app_cert_validation.certificate_arn
-    ssl_support_method       = "sni-only"
-    minimum_protocol_version = "TLSv1.2_2019"
+    acm_certificate_arn = aws_acm_certificate_validation.certificate_validation.certificate_arn
+    ssl_support_method  = "sni-only"
   }
 
   restrictions {
     geo_restriction {
       restriction_type = "none"
     }
-  }
-
-  tags = {
-    Name = var.cloudfront_tag_name
   }
 }

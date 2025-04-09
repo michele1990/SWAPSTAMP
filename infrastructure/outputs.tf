@@ -1,14 +1,14 @@
+output "nameservers" {
+  description = "Nameservers for the Route53 hosted zone. Update your registrar with these values."
+  value       = aws_route53_zone.primary.name_servers
+}
+
 output "s3_bucket_name" {
-  description = "Name of the S3 bucket"
-  value       = aws_s3_bucket.prod_app_bucket.bucket
+  description = "The S3 bucket used for website hosting."
+  value       = aws_s3_bucket.website_bucket.bucket
 }
 
-output "cloudfront_domain_name" {
-  description = "Domain name of the CloudFront distribution"
-  value       = aws_cloudfront_distribution.prod_app_distribution.domain_name
-}
-
-output "route53_nameservers" {
-  description = "Nameservers for Route53 zone"
-  value       = aws_route53_zone.zone.name_servers
+output "cloudfront_domain" {
+  description = "CloudFront distribution domain name."
+  value       = aws_cloudfront_distribution.website_distribution.domain_name
 }

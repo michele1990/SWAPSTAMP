@@ -1,8 +1,8 @@
 # Request a certificate covering the apex domain and www (as a SAN)
 resource "aws_acm_certificate" "certificate" {
   provider                  = aws.us_east_1
-  domain_name               = "swasptamp.com"
-  subject_alternative_names = ["www.swasptamp.com", "*.swasptamp.com"]
+  domain_name               = "swaptamp.com"
+  subject_alternative_names = ["www.swaptamp.com", "*.swaptamp.com"]
   validation_method         = "DNS"
 }
 

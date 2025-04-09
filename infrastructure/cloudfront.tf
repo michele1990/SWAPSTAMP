@@ -5,7 +5,6 @@ resource "aws_cloudfront_distribution" "website_distribution" {
   comment             = "CloudFront distribution for ${var.domain_name}"
   default_root_object = "index.html"
 
-  # Define the domain aliases served by CloudFront.
   aliases = [
     var.domain_name,
     "www.${var.domain_name}"
@@ -27,9 +26,7 @@ resource "aws_cloudfront_distribution" "website_distribution" {
 
     forwarded_values {
       query_string = false
-      cookies {
-        forward = "none"
-      }
+      cookies { forward = "none" }
     }
   }
 
@@ -39,8 +36,6 @@ resource "aws_cloudfront_distribution" "website_distribution" {
   }
 
   restrictions {
-    geo_restriction {
-      restriction_type = "none"
-    }
+    geo_restriction { restriction_type = "none" }
   }
 }

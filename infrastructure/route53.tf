@@ -1,3 +1,7 @@
 data "aws_route53_zone" "primary" {
-  zone_id = "Z08092634J9RRKFDFVCG"
+  filter {
+    name   = "name"
+    values = ["swapstamp.com."]  # note the trailing dot
+  }
+  private_zone = false
 }

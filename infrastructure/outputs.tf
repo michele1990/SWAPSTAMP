@@ -1,6 +1,6 @@
 output "nameservers" {
   description = "Nameservers for the Route53 hosted zone. Update your registrar with these values."
-  value       = aws_route53_zone.primary.name_servers
+  value       = data.aws_route53_zone.primary.name_servers
 }
 
 output "s3_bucket_name" {

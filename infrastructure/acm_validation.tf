@@ -1,22 +1,27 @@
 locals {
-  # Convert the set of validation options to a list so that we can index it.
-  cert_dvos = [for dvo in aws_acm_certificate.certificate.domain_validation_options : dvo]
+  # Convert the set of validation options into a list of objects
+  cert_dvos_list = [
+    for dvo in aws_acm_certificate.certificate.domain_validation_options : {
+      name  = dvo.resource_record_name
+      type  = dvo.resource_record_type
+      value = dvo.resource_record_value
+    }
+  ]
+  # Group by record name. If duplicates exist, they are collected as a list.
+  unique_cert_dvos = { for dvo in local.cert_dvos_list : dvo.name => dvo ... }
 }
 
-# Create DNS records for certificate validation in the hosted zone.
 resource "aws_route53_record" "cert_validation" {
-  # Hardcode the count to 3 (apex, www, and wildcard) assuming these are the three records returned.
-  count   = 3
-  zone_id = aws_route53_zone.primary.zone_id
-  name    = local.cert_dvos[count.index].resource_record_name
-  type    = local.cert_dvos[count.index].resource_record_type
-  records = [local.cert_dvos[count.index].resource_record_value]
-  ttl     = 60
+  for_each = local.unique_cert_dvos
+  zone_id  = data.aws_route53_zone.primary.zone_id
+  name     = each.key
+  type     = each.value[0].type      # Use the first element from the group
+  records  = [ each.value[0].value ]  # Use the first element's value
+  ttl      = 60
 }
 
-# Validate the ACM certificate once the DNS records are in place.
 resource "aws_acm_certificate_validation" "certificate_validation" {
   provider                = aws.us_east_1
   certificate_arn         = aws_acm_certificate.certificate.arn
-  validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
+  validation_record_fqdns = [for rec in aws_route53_record.cert_validation : rec.fqdn]
 }

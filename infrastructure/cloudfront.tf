@@ -1,11 +1,10 @@
 resource "aws_cloudfront_distribution" "website_distribution" {
-  depends_on          = [aws_acm_certificate_validation.certificate_validation]
+  # Remove any dependency on certificate validation since we’re not managing DNS validation.
   enabled             = true
   is_ipv6_enabled     = true
   comment             = "CloudFront distribution for ${var.domain_name}"
   default_root_object = "index.html"
 
-  # Define the domain aliases served by CloudFront.
   aliases = [
     var.domain_name,
     "www.${var.domain_name}"
@@ -27,20 +26,16 @@ resource "aws_cloudfront_distribution" "website_distribution" {
 
     forwarded_values {
       query_string = false
-      cookies {
-        forward = "none"
-      }
+      cookies { forward = "none" }
     }
   }
 
   viewer_certificate {
-    acm_certificate_arn = aws_acm_certificate_validation.certificate_validation.certificate_arn
+    acm_certificate_arn = aws_acm_certificate.certificate.arn
     ssl_support_method  = "sni-only"
   }
 
   restrictions {
-    geo_restriction {
-      restriction_type = "none"
-    }
+    geo_restriction { restriction_type = "none" }
   }
 }

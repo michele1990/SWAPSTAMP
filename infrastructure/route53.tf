@@ -1,7 +1,4 @@
 data "aws_route53_zone" "primary" {
-  filter {
-    name   = "name"
-    values = ["swapstamp.com."]  # note the trailing dot
-  }
+  name         = "swapstamp.com."   # note: trailing dot is required
   private_zone = false
 }

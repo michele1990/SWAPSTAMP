@@ -8,7 +8,7 @@ resource "aws_s3_bucket" "website_bucket" {
   }
 }
 
-# Set up a website configuration – note that CloudFront will be used to serve content
+# Set up a website configuration (CloudFront will front this bucket).
 resource "aws_s3_bucket_website_configuration" "website_config" {
   bucket = aws_s3_bucket.website_bucket.id
 
@@ -21,21 +21,21 @@ resource "aws_s3_bucket_website_configuration" "website_config" {
   }
 }
 
-# Upload the index.html (ensure you have an 'index.html' file available locally)
+# Upload the index.html file (ensure that an index.html exists locally in the same directory).
 resource "aws_s3_bucket_object" "index" {
-  bucket      = aws_s3_bucket.website_bucket.bucket
-  key         = "index.html"
-  source      = "index.html"
+  bucket       = aws_s3_bucket.website_bucket.bucket
+  key          = "index.html"
+  source       = "index.html"
   content_type = "text/html"
-  acl         = "private"
+  acl          = "private"
 }
 
-# Create an Origin Access Identity so CloudFront can access the S3 bucket securely.
+# Create an Origin Access Identity so CloudFront can securely access the S3 bucket.
 resource "aws_cloudfront_origin_access_identity" "oai" {
   comment = "OAI for ${var.domain_name} website"
 }
 
-# S3 Bucket Policy to allow CloudFront (via the OAI) to read content.
+# Bucket policy allowing CloudFront (OAI) to read objects from the bucket.
 resource "aws_s3_bucket_policy" "bucket_policy" {
   bucket = aws_s3_bucket.website_bucket.id
 

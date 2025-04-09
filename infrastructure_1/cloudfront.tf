@@ -1,12 +1,11 @@
 resource "aws_cloudfront_distribution" "website_distribution" {
-  depends_on = [aws_acm_certificate_validation.certificate_validation]
-  enabled    = true
-  is_ipv6_enabled = true
-  comment    = "CloudFront distribution for ${var.domain_name}"
+  depends_on          = [aws_acm_certificate_validation.certificate_validation]
+  enabled             = true
+  is_ipv6_enabled     = true
+  comment             = "CloudFront distribution for ${var.domain_name}"
   default_root_object = "index.html"
 
-  # List all aliases. A wildcard record is not supported as an alias in CloudFront,
-  # so we list the apex and www. Additional domain records can be added via Route53.
+  # Define the domain aliases served by CloudFront.
   aliases = [
     var.domain_name,
     "www.${var.domain_name}"
@@ -21,9 +20,9 @@ resource "aws_cloudfront_distribution" "website_distribution" {
   }
 
   default_cache_behavior {
-    target_origin_id = "S3Origin"
-    allowed_methods  = ["GET", "HEAD"]
-    cached_methods   = ["GET", "HEAD"]
+    target_origin_id       = "S3Origin"
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
     viewer_protocol_policy = "redirect-to-https"
 
     forwarded_values {

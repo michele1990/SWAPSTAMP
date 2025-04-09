@@ -1,12 +1,15 @@
-# Request a certificate covering the apex domain and www (as a SAN)
+# Request a certificate covering the apex domain, the www subdomain, and any subdomain via wildcard.
 resource "aws_acm_certificate" "certificate" {
   provider                  = aws.us_east_1
-  domain_name               = "swaptamp.com"
-  subject_alternative_names = ["www.swaptamp.com", "*.swaptamp.com"]
+  domain_name               = var.domain_name
+  subject_alternative_names = [
+    "www.${var.domain_name}",
+    "*.${var.domain_name}"
+  ]
   validation_method         = "DNS"
 }
 
-# Create DNS records for validation in the hosted zone
+# Create DNS records for certificate validation in the hosted zone.
 resource "aws_route53_record" "cert_validation" {
   for_each = {
     for dvo in aws_acm_certificate.certificate.domain_validation_options : dvo.domain_name => {
@@ -15,6 +18,7 @@ resource "aws_route53_record" "cert_validation" {
       value = dvo.resource_record_value
     }
   }
+
   zone_id = aws_route53_zone.primary.zone_id
   name    = each.value.name
   type    = each.value.type
@@ -22,7 +26,7 @@ resource "aws_route53_record" "cert_validation" {
   ttl     = 60
 }
 
-# Validate the ACM certificate once DNS records are in place
+# Validate the ACM certificate once the DNS records are in place.
 resource "aws_acm_certificate_validation" "certificate_validation" {
   provider                = aws.us_east_1
   certificate_arn         = aws_acm_certificate.certificate.arn

@@ -1,4 +1,5 @@
 resource "aws_cloudfront_distribution" "website_distribution" {
+  # Remove any dependency on certificate validation since we’re not managing DNS validation.
   enabled             = true
   is_ipv6_enabled     = true
   comment             = "CloudFront distribution for ${var.domain_name}"

@@ -1,6 +1,6 @@
 output "nameservers" {
-  description = "Nameservers for the Route53 hosted zone (update your registrar with these values if needed)."
-  value = [
+  description = "Nameservers for the Route53 hosted zone. Update your registrar with these values if needed."
+  value       = [
     "ns-1838.awsdns-37.co.uk",
     "ns-189.awsdns-23.com",
     "ns-560.awsdns-06.net",

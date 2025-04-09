@@ -8,7 +8,6 @@ resource "aws_acm_certificate" "certificate" {
   validation_method         = "DNS"
 
   lifecycle {
-    # Once the certificate is issued, we ignore changes in the computed validation options.
     ignore_changes = [domain_validation_options]
   }
 }

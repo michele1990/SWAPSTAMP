@@ -1,5 +1,4 @@
 resource "aws_cloudfront_distribution" "website_distribution" {
-  depends_on          = [aws_acm_certificate_validation.certificate_validation]
   enabled             = true
   is_ipv6_enabled     = true
   comment             = "CloudFront distribution for ${var.domain_name}"
@@ -31,7 +30,7 @@ resource "aws_cloudfront_distribution" "website_distribution" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = aws_acm_certificate_validation.certificate_validation.certificate_arn
+    acm_certificate_arn = aws_acm_certificate.certificate.arn
     ssl_support_method  = "sni-only"
   }
 

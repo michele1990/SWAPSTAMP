@@ -11,7 +11,8 @@ resource "aws_acm_certificate" "certificate" {
 
 # Create DNS records for certificate validation in the hosted zone.
 resource "aws_route53_record" "cert_validation" {
-  count   = length(aws_acm_certificate.certificate.domain_validation_options)
+  # Hardcode the count to 3 (apex, www, and wildcard)
+  count   = 3
   zone_id = aws_route53_zone.primary.zone_id
   name    = aws_acm_certificate.certificate.domain_validation_options[count.index].resource_record_name
   type    = aws_acm_certificate.certificate.domain_validation_options[count.index].resource_record_type

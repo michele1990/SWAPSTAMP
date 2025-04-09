@@ -3,7 +3,7 @@ resource "aws_route53_zone" "primary" {
   name = var.domain_name
 }
 
-# Apex domain alias (swapstamp.org) pointing to CloudFront.
+# Apex domain alias (swapstamp.com) pointing to CloudFront.
 resource "aws_route53_record" "apex" {
   zone_id = aws_route53_zone.primary.zone_id
   name    = var.domain_name
@@ -15,7 +15,7 @@ resource "aws_route53_record" "apex" {
   }
 }
 
-# www subdomain (www.swapstamp.org) alias.
+# www subdomain alias (www.swapstamp.com).
 resource "aws_route53_record" "www" {
   zone_id = aws_route53_zone.primary.zone_id
   name    = "www.${var.domain_name}"
@@ -27,7 +27,7 @@ resource "aws_route53_record" "www" {
   }
 }
 
-# Wildcard record to allow future subdomains to point to the same CloudFront distribution.
+# Wildcard record for future subdomains (like api.swapstamp.com, stage.swapstamp.com, etc.).
 resource "aws_route53_record" "wildcard" {
   zone_id = aws_route53_zone.primary.zone_id
   name    = "*.${var.domain_name}"

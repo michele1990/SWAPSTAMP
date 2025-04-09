@@ -5,7 +5,6 @@ resource "aws_route53_record" "cert_validation_apex" {
   records = ["_c4eb5c1cbec0c516c8497523957e10fa.xlfgrmvvlj.acm-validations.aws."]
   ttl     = 60
 
-  # In case the record already exists, ignore changes
   lifecycle {
     ignore_changes = [records]
   }

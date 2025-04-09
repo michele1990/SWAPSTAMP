@@ -1,5 +1,5 @@
 resource "aws_route53_record" "apex" {
-  zone_id = "Z08092634J9RRKFDFVCG"
+  zone_id = "Z08092634J9RRKFDFVCG"  # your known hosted zone ID
   name    = var.domain_name
   type    = "A"
   alias {

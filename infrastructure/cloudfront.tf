@@ -30,9 +30,8 @@ resource "aws_cloudfront_distribution" "distribution" {
     }
   }
 
-  price_class = "PriceClass_100"  # classe di prezzo minima
+  price_class = "PriceClass_100"  # Classe di prezzo minima
 
-  # Per ora si usa il certificato default di CloudFront; il certificato custom HTTPS verrà aggiunto successivamente.
   viewer_certificate {
     cloudfront_default_certificate = true
   }

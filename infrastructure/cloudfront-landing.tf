@@ -1,7 +1,7 @@
-resource "aws_cloudfront_distribution" "distribution" {
+resource "aws_cloudfront_distribution" "website" {
   origin {
-    domain_name = aws_s3_bucket.website_bucket.website_endpoint
-    origin_id   = "S3-${aws_s3_bucket.website_bucket.id}"
+    domain_name = aws_s3_bucket.website_main_bucket.website_endpoint
+    origin_id   = "S3-main-${aws_s3_bucket.website_main_bucket.id}"
 
     custom_origin_config {
       http_port              = 80
@@ -13,14 +13,16 @@ resource "aws_cloudfront_distribution" "distribution" {
 
   enabled             = true
   default_root_object = "index.html"
-  aliases             = ["app.${var.domain_name}"]
+  aliases             = [
+    var.domain_name,          # swapstamp.com
+    "www.${var.domain_name}", # www.swapstamp.com
+  ]
 
   default_cache_behavior {
-    target_origin_id       = "S3-${aws_s3_bucket.website_bucket.id}"
+    target_origin_id       = "S3-main-${aws_s3_bucket.website_main_bucket.id}"
     viewer_protocol_policy = "redirect-to-https"
     allowed_methods        = ["GET", "HEAD", "OPTIONS"]
     cached_methods         = ["GET", "HEAD"]
-
     forwarded_values {
       query_string = false
       cookies {
@@ -44,6 +46,6 @@ resource "aws_cloudfront_distribution" "distribution" {
   }
 
   tags = {
-    Name = "Swapstamp App Distribution"
+    Name = "Swapstamp Main Website"
   }
 }

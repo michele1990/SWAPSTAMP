@@ -1,0 +1,53 @@
+{
+    "ResourceRecordSets": [
+        {
+            "Name": "swapstamp.com.",
+            "Type": "NS",
+            "TTL": 172800,
+            "ResourceRecords": [
+                {
+                    "Value": "ns-1658.awsdns-15.co.uk."
+                },
+                {
+                    "Value": "ns-785.awsdns-34.net."
+                },
+                {
+                    "Value": "ns-1400.awsdns-47.org."
+                },
+                {
+                    "Value": "ns-28.awsdns-03.com."
+                }
+            ]
+        },
+        {
+            "Name": "swapstamp.com.",
+            "Type": "SOA",
+            "TTL": 900,
+            "ResourceRecords": [
+                {
+                    "Value": "ns-1658.awsdns-15.co.uk. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400"
+                }
+            ]
+        },
+        {
+            "Name": "_8f940b893bd23c3bfda9a1cf1ab79b28.swapstamp.com.",
+            "Type": "CNAME",
+            "TTL": 60,
+            "ResourceRecords": [
+                {
+                    "Value": "_c4eb5c1cbec0c516c8497523957e10fa.xlfgrmvvlj.acm-validations.aws."
+                }
+            ]
+        },
+        {
+            "Name": "_6c61d250d5618b79bf3834b830931c97.www.swapstamp.com.",
+            "Type": "CNAME",
+            "TTL": 60,
+            "ResourceRecords": [
+                {
+                    "Value": "_5d0e78264be552383b02ef19c4254aa8.xlfgrmvvlj.acm-validations.aws."
+                }
+            ]
+        }
+    ]
+}

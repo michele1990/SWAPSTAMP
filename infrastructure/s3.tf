@@ -72,17 +72,15 @@ resource "aws_s3_bucket_policy" "website_main_bucket_policy" {
 }
 
 resource "aws_s3_bucket" "redirect_bucket" {
-  bucket        = "swapstamp-${var.redirect_subdomain}-${var.domain_name}" # e.g., swapstamp-go-swapstamp.com
+  bucket        = "swapstamp-<your-subdomain>-${var.domain_name}"
   force_destroy = true
 
   website {
     redirect_all_requests_to {
-      host_name = "app.${var.domain_name}"  # target: app.swapstamp.com
+      host_name = "app.${var.domain_name}"
       protocol  = "https"
     }
   }
-
-  tags = { Name = "Swapstamp Redirect (${local.redirect_fqdn} -> app.${var.domain_name})" }
 }
 
 # Public-website pattern (matches your current approach)

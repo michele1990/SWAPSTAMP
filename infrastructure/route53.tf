@@ -52,3 +52,14 @@ resource "aws_route53_record" "google_site_verification" {
   records = ["google-site-verification=iMiijcnQJt5qHK-9VEbLtKUcT7zzWarTYcu-rpVC0vI"]
   allow_overwrite = true
 }
+
+resource "aws_route53_record" "redirect_alias" {
+  zone_id = aws_route53_zone.primary.zone_id
+  name    = local.redirect_fqdn
+  type    = "A"
+  alias {
+    name                   = aws_cloudfront_distribution.redirect.domain_name
+    zone_id                = aws_cloudfront_distribution.redirect.hosted_zone_id
+    evaluate_target_health = false
+  }
+}

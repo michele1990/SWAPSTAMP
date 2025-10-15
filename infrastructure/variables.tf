@@ -10,13 +10,12 @@ variable "region" {
   default     = "eu-west-3"
 }
 
-# Subdomain that will redirect to app.swapstamp.com
-variable "redirect_subdomain" {
-  description = "Subdomain that will 301-redirect to app.swapstamp.com"
+variable "new_static_subdomain" {
+  description = "Subdomain for the new static website"
   type        = string
-  default     = "go" # change to what you want (e.g., "admin", "start", "docs")
+  default     = "<new_subdomain>"
 }
 
 locals {
-  redirect_fqdn = "${var.redirect_subdomain}.${var.domain_name}" # e.g., go.swapstamp.com
+  new_static_fqdn = "${var.new_static_subdomain}.${var.domain_name}"
 }

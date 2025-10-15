@@ -53,13 +53,15 @@ resource "aws_route53_record" "google_site_verification" {
   allow_overwrite = true
 }
 
-resource "aws_route53_record" "redirect_alias" {
+# DNS A/ALIAS for the new subdomain → CloudFront
+resource "aws_route53_record" "website_new_alias" {
   zone_id = aws_route53_zone.primary.zone_id
-  name    = local.redirect_fqdn
+  name    = local.new_static_fqdn
   type    = "A"
+
   alias {
-    name                   = aws_cloudfront_distribution.redirect.domain_name
-    zone_id                = aws_cloudfront_distribution.redirect.hosted_zone_id
+    name                   = aws_cloudfront_distribution.new_static.domain_name
+    zone_id                = aws_cloudfront_distribution.new_static.hosted_zone_id
     evaluate_target_health = false
   }
 }

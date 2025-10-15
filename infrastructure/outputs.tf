@@ -7,3 +7,4 @@ output "website_cloudfront_domain" {
   description = "The CloudFront distribution domain name for the main website (swapstamp.com/www)."
   value       = aws_cloudfront_distribution.website.domain_name
 }
+

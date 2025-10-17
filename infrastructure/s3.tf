@@ -8,7 +8,7 @@ resource "aws_s3_bucket" "website_bucket" {
 
   website {
     index_document = "index.html"
-    error_document = "error.html"
+    error_document = "index.html"
   }
 }
 
@@ -44,7 +44,7 @@ resource "aws_s3_bucket" "website_main_bucket" {
 
   website {
     index_document = "index.html"
-    error_document = "error.html"
+    error_document = "index.html"
   }
 }
 
@@ -78,7 +78,7 @@ resource "aws_s3_bucket" "website_new_bucket" {
 
   website {
     index_document = "index.html"
-    error_document = "error.html"
+    error_document = "index.html"
   }
 }
 

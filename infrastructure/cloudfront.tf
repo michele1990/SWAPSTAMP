@@ -3,19 +3,6 @@ resource "aws_cloudfront_distribution" "distribution" {
     domain_name = aws_s3_bucket.website_bucket.website_endpoint
     origin_id   = "S3-${aws_s3_bucket.website_bucket.id}"
 
-    custom_error_response {
-      error_code            = 403
-      response_page_path    = "/index.html"
-      response_code         = 200
-      error_caching_min_ttl = 0
-    }
-
-    custom_error_response {
-      error_code            = 404
-      response_page_path    = "/index.html"
-      response_code         = 200
-      error_caching_min_ttl = 0
-    }
 
     custom_origin_config {
       http_port              = 80
@@ -41,6 +28,20 @@ resource "aws_cloudfront_distribution" "distribution" {
         forward = "none"
       }
     }
+  }
+
+  custom_error_response {
+    error_code            = 403
+    response_page_path    = "/index.html"
+    response_code         = 200
+    error_caching_min_ttl = 0
+  }
+
+  custom_error_response {
+    error_code            = 404
+    response_page_path    = "/index.html"
+    response_code         = 200
+    error_caching_min_ttl = 0
   }
 
   price_class = "PriceClass_100"

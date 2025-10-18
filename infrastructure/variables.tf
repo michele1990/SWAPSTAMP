@@ -13,7 +13,7 @@ variable "region" {
 variable "new_static_subdomain" {
   description = "Subdomain for the new static website"
   type        = string
-  default     = "<new_subdomain>"
+  default     = "docs"
 }
 
 locals {

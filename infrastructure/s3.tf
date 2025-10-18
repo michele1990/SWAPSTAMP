@@ -73,8 +73,7 @@ resource "aws_s3_bucket_policy" "website_main_bucket_policy" {
 
 # New static website bucket (e.g., docs.swapstamp.com)
 resource "aws_s3_bucket" "website_new_bucket" {
-  count         = 0   # prevents Terraform from creating it
-  bucket        = "swapstamp-${var.new_static_subdomain}-${var.domain_name}"
+  bucket        = "swapstamp-docs-static-xyz"
   force_destroy = true
 
   website {

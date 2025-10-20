@@ -130,11 +130,12 @@ resource "aws_cloudfront_distribution" "qr" {
   }
 
   # Logging abilitato -> S3 logs bucket
-  logging_config {
-    bucket = "${aws_s3_bucket.qr_logs.bucket_regional_domain_name}"
-    prefix = "qr/"
-    include_cookies = false
-  }
+logging_config {
+  # usa il domain name "globale" (…s3.amazonaws.com), non quello regionale
+  bucket          = aws_s3_bucket.qr_logs.bucket_domain_name
+  prefix          = "qr/"
+  include_cookies = false
+}
 
   # Classe economica
   price_class = "PriceClass_100"
@@ -185,4 +186,31 @@ output "qr_domain" {
 output "qr_cloudfront_domain" {
   value       = aws_cloudfront_distribution.qr.domain_name
   description = "CloudFront domain for QR"
+}
+
+# Consenti al servizio CloudFront Logs di scrivere nel bucket
+resource "aws_s3_bucket_policy" "qr_logs_policy" {
+  bucket = aws_s3_bucket.qr_logs.id
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Sid      = "AWSCloudFrontLogsPutObject",
+        Effect   = "Allow",
+        Principal = { Service = "delivery.logs.amazonaws.com" },
+        Action   = "s3:PutObject",
+        Resource = "${aws_s3_bucket.qr_logs.arn}/qr/*",
+        Condition = {
+          StringEquals = { "s3:x-amz-acl" = "bucket-owner-full-control" }
+        }
+      },
+      {
+        Sid      = "AWSCloudFrontLogsGetBucketAcl",
+        Effect   = "Allow",
+        Principal = { Service = "delivery.logs.amazonaws.com" },
+        Action   = "s3:GetBucketAcl",
+        Resource = aws_s3_bucket.qr_logs.arn
+      }
+    ]
+  })
 }

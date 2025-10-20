@@ -54,7 +54,8 @@ resource "aws_s3_bucket_policy" "qr_site_policy" {
 resource "aws_s3_bucket" "qr_logs" {
   bucket        = local.qr_logs_bucket_name
   force_destroy = true
-  tags          = { Name = "CloudFront Logs (QR)" }
+  # rimuovi o commenta la riga tags
+  # tags = { Name = "CloudFront Logs (QR)" }
 }
 
 # (Consigliato) Ownership controls + ACL per compatibilità logging

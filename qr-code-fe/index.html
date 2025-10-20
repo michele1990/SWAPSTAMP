@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>QR Redirect</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; padding: 24px; }
+    .hint { color: #666; font-size: 14px; }
+  </style>
+  <noscript>JavaScript required</noscript>
+</head>
+<body>
+<script>
+(function () {
+  // === 1) Prendi lo slug: /{unique-id} ===
+  var slug = (location.pathname || "/").replace(/^\/+/, "").trim();
+
+  // === 2) *** MAPPING QR → URL DI DESTINAZIONE *** ===
+  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  // METTI QUI i tuoi mapping "QR ID" -> "URL di redirect"
+  // Esempi:
+  var MAPPING = {
+    "app": "https://app.swapstamp.com/vendor/dashboard"
+  };
+  // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+  // Se chiamato / => landing tua
+  if (!slug) { location.replace("https://swapstamp.com"); return; }
+
+  // Trova target
+  var target = MAPPING[slug];
+
+  // Fallback se QR non trovato
+  if (!target) {
+    // Mostra una pagina tua o reindirizza a una pagina 404 dedicata
+    location.replace("https://swapstamp.com/qr-not-found");
+    return;
+  }
+
+  // Preserva la querystring originale (UTM ecc.)
+  if (location.search) {
+    var joinChar = target.indexOf("?") === -1 ? "?" : "&";
+    target = target + joinChar + location.search.slice(1);
+  }
+
+  // Redirect trasparente
+  location.replace(target);
+})();
+</script>
+
+<p class="hint">
+  Redirecting… If you are not redirected automatically, <a id="fallback" href="#">click here</a>.
+</p>
+<script>document.getElementById('fallback').href = location.href;</script>
+</body>
+</html>

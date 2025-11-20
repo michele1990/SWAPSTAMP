@@ -46,12 +46,18 @@ resource "aws_route53_record" "www_alias" {
 
 resource "aws_route53_record" "google_site_verification" {
   zone_id = aws_route53_zone.primary.zone_id
-  name    = var.domain_name   # es. "swapstamp.com"
+  name    = var.domain_name   # "@" / blank in Zoho docs = apex = swapstamp.com
   type    = "TXT"
   ttl     = 300
-  records = ["google-site-verification=iMiijcnQJt5qHK-9VEbLtKUcT7zzWarTYcu-rpVC0vI"]
+
+  records = [
+    "google-site-verification=iMiijcnQJt5qHK-9VEbLtKUcT7zzWarTYcu-rpVC0vI",
+    "zoho-verification=zb92663460.zmverify.zoho.eu"
+  ]
+
   allow_overwrite = true
 }
+
 
 # DNS A/ALIAS for the new subdomain → CloudFront
 resource "aws_route53_record" "website_new_alias" {

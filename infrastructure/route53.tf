@@ -52,6 +52,7 @@ resource "aws_route53_record" "google_site_verification" {
 
   records = [
     "google-site-verification=iMiijcnQJt5qHK-9VEbLtKUcT7zzWarTYcu-rpVC0vI",
+    "google-site-verification=M3TAmjYCvmzhzOvi2YJMGLEHVbkCX6-Uc1appeg8NTs",
     "zoho-verification=zb92663460.zmverify.zoho.eu"
   ]
 

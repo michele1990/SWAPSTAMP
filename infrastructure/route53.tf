@@ -59,6 +59,21 @@ resource "aws_route53_record" "google_site_verification" {
   allow_overwrite = true
 }
 
+resource "aws_route53_record" "zoho_mx" {
+  zone_id = aws_route53_zone.primary.zone_id
+  name    = var.domain_name
+  type    = "MX"
+  ttl     = 300
+
+  records = [
+    "10 mx.zoho.eu",
+    "20 mx2.zoho.eu",
+    "50 mx3.zoho.eu",
+  ]
+
+  allow_overwrite = true
+}
+
 
 # DNS A/ALIAS for the new subdomain → CloudFront
 resource "aws_route53_record" "website_new_alias" {

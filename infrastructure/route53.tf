@@ -101,6 +101,34 @@ resource "aws_route53_record" "dmarc" {
   allow_overwrite = true
 }
 
+resource "aws_route53_record" "ses_domain_verification" {
+  zone_id = aws_route53_zone.primary.zone_id
+  name    = "_amazonses.${var.domain_name}"
+  type    = "TXT"
+  ttl     = 300
+
+  records = [
+    "4hho8Q8Bn9GdJ3zxYl86lE/9ij0/Yr3n132unW5PmAA="
+  ]
+}
+
+resource "aws_route53_record" "ses_dkim" {
+  for_each = {
+    "sbg4rga3zr7werzzmhchm3w2icorvkic" = "sbg4rga3zr7werzzmhchm3w2icorvkic.dkim.amazonses.com"
+    "th3lmimsfvufqdfpwuvxh4lt7yljmxlk" = "th3lmimsfvufqdfpwuvxh4lt7yljmxlk.dkim.amazonses.com"
+    "vdwztxu4wcnju57p2uwnaqwovtwd3mv5" = "vdwztxu4wcnju57p2uwnaqwovtwd3mv5.dkim.amazonses.com"
+  }
+
+  zone_id = aws_route53_zone.primary.zone_id
+  name    = "${each.key}._domainkey.${var.domain_name}"
+  type    = "CNAME"
+  ttl     = 300
+
+  records = [
+    each.value
+  ]
+}
+
 
 # DNS A/ALIAS for the new subdomain → CloudFront
 resource "aws_route53_record" "website_new_alias" {
